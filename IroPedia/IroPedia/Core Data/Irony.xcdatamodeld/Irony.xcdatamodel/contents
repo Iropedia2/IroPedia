@@ -4,10 +4,11 @@
         <attribute name="describe" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="index" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <relationship name="relationship" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Situation"/>
+        <relationship name="situation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Situation" inverseName="name" inverseEntity="Situation"/>
     </entity>
     <entity name="Situation" representedClassName="Situation" syncable="YES" codeGenerationType="class">
         <attribute name="index" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="situation" optional="YES" attributeType="String"/>
+        <relationship name="name" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Irony" inverseName="situation" inverseEntity="Irony"/>
     </entity>
 </model>
