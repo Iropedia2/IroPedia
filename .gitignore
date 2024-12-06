@@ -1,3 +1,4 @@
-#追跡しないファイル
 .DS_Store
-*.xcuserstate
+*.xcodeproj/project.pbxproj
+*.xcworkspace
+Pods/
