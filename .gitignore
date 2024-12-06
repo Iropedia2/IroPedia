@@ -2,4 +2,3 @@
 *.xcodeproj/project.pbxproj
 *.xcworkspace
 Pods/
-*.xcuserstate
