@@ -12,4 +12,5 @@ struct Item: Identifiable {
     let name: String
     let index: Int
     let type: String
+    let parameters: [Int]
 }
