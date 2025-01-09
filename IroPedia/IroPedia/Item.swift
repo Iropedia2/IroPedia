@@ -11,6 +11,8 @@ struct Item: Identifiable {
     let id = UUID()
     let name: String
     let index: Int
-    let type: String
+    let place: String
+    let entity: String
+    let explain: String
     let parameters: [Int]
 }

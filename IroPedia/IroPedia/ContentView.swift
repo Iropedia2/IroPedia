@@ -13,6 +13,7 @@ struct ContentView: View {
     @State private var registerText_i: String = ""
     @State private var registerText_p: String = ""
     @State private var registerText_e: String = ""
+    @State private var explainText: String = ""
     @State private var registerText_l: [Int] = Array(repeating: 0, count: 3)
     @State private var boxColor: Color = Color.gray
     @State private var boxIcon: String = ""
@@ -22,10 +23,10 @@ struct ContentView: View {
     @State private var recommendedItem: Item? = nil
     @State private var functions: [Functions] = [.browse, .history, .register, .Delete, .recommendation]
     @State private var browsebool: Bool = true
-    @State private var historybool: Bool = true
-    @State private var registerbool: Bool = true
-    @State private var Deletebool: Bool = true
-    @State private var recommendationbool: Bool = true
+    @State private var historybool: Bool = false
+    @State private var registerbool: Bool = false
+    @State private var Deletebool: Bool = false
+    @State private var recommendationbool: Bool = false
     @Environment(\.colorScheme) var colorScheme
     
     var filteredItems: [Item] {
@@ -58,16 +59,18 @@ struct ContentView: View {
                 TextField("皮肉", text: $registerText_i).textFieldStyle(RoundedBorderTextFieldStyle()).padding(.horizontal)
                 TextField("場面", text: $registerText_p).textFieldStyle(RoundedBorderTextFieldStyle()).padding(.horizontal)
                 TextField("対象", text: $registerText_e).textFieldStyle(RoundedBorderTextFieldStyle()).padding(.horizontal)
+                TextField("説明", text: $explainText).textFieldStyle(RoundedBorderTextFieldStyle()).padding(.horizontal)
                 TextField("皮肉の強烈さ", value: $registerText_l[0], formatter: numberFormatter).textFieldStyle(RoundedBorderTextFieldStyle()).padding(.horizontal)
                 TextField("場所との親和性", value: $registerText_l[1], formatter: numberFormatter).textFieldStyle(RoundedBorderTextFieldStyle()).padding(.horizontal)
                 TextField("対象に対するダメージ", value: $registerText_l[2], formatter: numberFormatter).textFieldStyle(RoundedBorderTextFieldStyle()).padding(.horizontal)
                 Button("登録") {
-                    var sourceData = "100,\(registerText_i),\(registerText_p)"
+                    var sourceData = ""
                     if !registerText_i.isEmpty && !registerText_p.isEmpty {
                         writeCSVData(sources: sourceData)
                         registerText_i = ""
                         registerText_p = ""
                         registerText_e = ""
+                        explainText = ""
                         registerText_l = [0, 0, 0]
                         withAnimation {
                             boxColor = Color.green
@@ -112,7 +115,10 @@ struct ContentView: View {
                     Text("登録番号: \(recommended.index)")
                         .font(.body)
                         .padding(.top, 10)
-                    Text("場面: \(recommended.type)")
+                    Text("場面: \(recommended.place)")
+                        .font(.body)
+                        .padding(.top, 10)
+                    Text("対象: \(recommended.entity)")
                         .font(.body)
                         .padding(.top, 10)
                     Button("この皮肉を見る") {
@@ -144,10 +150,12 @@ struct ContentView: View {
             VStack {
                 if let item = selectedItem {
                     VStack {
-                        Text("内容").font(.headline).padding(.top, 20)
+                        Text("内容").font(.headline).multilineTextAlignment(.center).padding(.top, 20)
                         Text("登録番号: \(item.index)").font(.title2).padding(.top, 10)
-                        Text("\(item.name)").font(.title3).padding(.top, 10)
-                        Text("場面: \(item.type)").font(.body).padding(.top, 10)
+                        Text("\(item.name)").font(.title).padding(.top, 10)
+                        Text("場面: \(item.place)").font(.title3).padding(.top, 10)
+                        Text("対象: \(item.entity)").font(.title3).padding(.top, 10)
+                        Text("説明: \(item.explain)").font(.body).padding(.top, 10)
                         Spacer()
                         
                         Button("戻る") {
@@ -304,17 +312,19 @@ struct ContentView: View {
 
         do {
             let data = try String(contentsOf: fileURL, encoding: .utf8)
+            print("ファイル読み込み成功: \(fileURL.path)")
             let rows = data.components(separatedBy: "\n").dropFirst()
             items = []
             for row in rows {
                 let columns = row.components(separatedBy: ",")
-                if columns.count >= 3,
-                   let index = Int(columns[0]) {
-                    let p1 = columns.count > 3 ? Int(columns[3]) ?? 0 : 0
-                    let p2 = columns.count > 4 ? Int(columns[4]) ?? 0 : 0
-                    let p3 = columns.count > 5 ? Int(columns[5]) ?? 0 : 0
+                if columns.count >= 3, let index = Int(columns[0]) {
+                    let exp = columns[4]
+                    let p1 = columns.count > 5 ? Int(columns[5]) ?? 0 : 0
+                    let p2 = columns.count > 6 ? Int(columns[6]) ?? 0 : 0
+                    let p3 = columns.count > 7 ? Int(columns[7]) ?? 0 : 0
                     let p = [p1, p2, p3]
-                    let item = Item(name: columns[1], index: index, type: columns[2], parameters: p)
+                    let item = Item(name: columns[1], index: index, place: columns[2], entity: columns[3], explain: exp, parameters: p)
+                    print(item)
                     self.items.append(item)
                 }
             }
@@ -344,7 +354,7 @@ struct ContentView: View {
             }
             let newIndex = lastIndex + 1
             let tostring = registerText_l.map{String($0)}.joined(separator: ",")
-            let newData = "\(newIndex),\(registerText_i),\(registerText_p),\(tostring)\n"
+            let newData = "\(newIndex),\(registerText_i),\(registerText_p),\(registerText_e),\(explainText),\(tostring)\n"
             if let fileHandle = try? FileHandle(forWritingTo: URL) {
                 fileHandle.seekToEndOfFile()
                 if !data.hasSuffix("\n") {
