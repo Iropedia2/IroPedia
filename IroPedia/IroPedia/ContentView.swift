@@ -144,6 +144,35 @@ struct ContentView: View {
         .padding(.vertical)
     }
     
+    var sView: some View {
+        ScrollView {
+            if filteredItems.isEmpty {
+                VStack {
+                    Text("落ち着いてタイピングしな〜").font(.headline).foregroundColor(.gray).padding(.top, 20).padding(.horizontal)
+                    Spacer()
+                }
+            } else {
+                VStack(spacing: 10) {
+                    ForEach(filteredItems) { item in
+                        HStack {
+                            Text("\(item.index)").bold()
+                            Text("\(item.name)")
+                            Spacer()
+                        }
+                        .padding()
+                        .background(Color.gray.opacity(0.2))
+                        .cornerRadius(8)
+                        .onTapGesture {
+                            selectedItem = item
+                            historydata(item)
+                        }
+                    }
+                }
+                .padding()
+            }
+        }
+    }
+    
     var body: some View {
         HStack(spacing: 0) {
             // 左
@@ -226,28 +255,8 @@ struct ContentView: View {
                     recView
                 } else {
                     VStack {
-                        Text("一覧")
-                            .font(.headline)
-                            .padding(.top, 20)
-                        ScrollView {
-                            VStack(spacing: 10) {
-                                ForEach(filteredItems) { item in
-                                    HStack {
-                                        Text("\(item.index)").bold()
-                                        Text("\(item.name)")
-                                        Spacer()
-                                    }
-                                    .padding()
-                                    .background(Color.gray.opacity(0.2))
-                                    .cornerRadius(8)
-                                    .onTapGesture {
-                                        selectedItem = item
-                                        historydata(item)
-                                    }
-                                }
-                            }
-                            .padding()
-                        }
+                        Text("一覧").font(.headline).padding(.top, 20)
+                        sView
                         .background(
                             RoundedRectangle(cornerRadius: 15)
                                 .fill(Color.white)
