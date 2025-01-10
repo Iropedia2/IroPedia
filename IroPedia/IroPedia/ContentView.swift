@@ -7,7 +7,45 @@ enum Functions: String {
     case credit = "credit"
     case synchronize = "synchronize"
 }
+struct SplashView: View {
+    @State private var isActive = false
+    @State private var scale: CGFloat = 0.8
+    @State private var opacity: Double = 0.5
 
+    var body: some View {
+        if isActive {
+            ContentView() // スプラッシュ後にContentViewを表示
+        } else {
+            VStack {
+                Image("AppIcon") // アイコン画像
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 200, height: 200)
+                    .scaleEffect(scale)
+                    .opacity(opacity)
+                    .onAppear {
+                        withAnimation(.easeIn(duration: 1.2)) {
+                            scale = 1.0
+                            opacity = 1.0
+                        }
+                    }
+                Text("IroPedia")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .foregroundColor(.blue)
+            }
+            .onAppear {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { // 2秒後に切り替え
+                    withAnimation {
+                        isActive = true
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.white) // 背景色
+        }
+    }
+}
 struct ContentView: View {
     @State private var searchText: String = ""
     @State private var registerText_i: String = ""
@@ -41,10 +79,14 @@ struct ContentView: View {
             VStack {
                 if let item = selectedItem {
                     VStack {
-                        Text("内容").font(.headline).padding(.top, 20)
-                        Text("登録番号: \(item.index)").font(.title2).padding(.top, 10)
-                        Text("\(item.name)").font(.title3).padding(.top, 10)
-                        Text("場面: \(item.type)").font(.body).padding(.top, 10)
+                        Text("内容")
+                            .font(.headline)
+                            .padding(.top, 20)
+                            .foregroundColor(Color.black)
+
+                        Text("登録番号: \(item.index)").font(.title2).padding(.top, 10).foregroundColor(Color.black)
+                        Text("\(item.name)").font(.title3).padding(.top, 10).foregroundColor(Color.black)
+                        Text("場面: \(item.type)").font(.body).padding(.top, 10).foregroundColor(Color.black)
                         Spacer()
                         
                         Button("戻る") {
@@ -62,7 +104,7 @@ struct ContentView: View {
                     .padding()
                 } else if registerbool {
                     VStack {
-                        Text("登録画面").font(.headline).padding(.top, 20)
+                        Text("登録画面").font(.headline).padding(.top, 20).foregroundColor(Color.black)
                         VStack(spacing: 15) {
                             TextField("皮肉", text: $registerText_i).textFieldStyle(RoundedBorderTextFieldStyle()).padding(.horizontal)
                             TextField("場面", text: $registerText_p).textFieldStyle(RoundedBorderTextFieldStyle()).padding(.horizontal)
@@ -78,7 +120,7 @@ struct ContentView: View {
                     VStack {
                         Text("一覧")
                             .font(.headline)
-                            .padding(.top, 20)
+                            .padding(.top, 20).foregroundColor(Color.black)
                         ScrollView {
                             VStack(spacing: 10) {
                                 ForEach(filteredItems) { item in

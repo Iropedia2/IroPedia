@@ -11,7 +11,7 @@ import SwiftUI
 struct IroPediaApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SplashView() // スプラッシュビューを最初に表示
         }
     }
 }

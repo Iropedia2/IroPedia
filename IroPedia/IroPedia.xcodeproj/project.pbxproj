@@ -29,9 +29,30 @@
 		A56A8BF12CDDD0D90030E974 /* IroPediaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IroPediaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		A4FC0D942D306B2D00AD3E27 /* Exceptions for "IroPedia" folder in "IroPediaTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Assets.xcassets,
+			);
+			target = A56A8BE62CDDD0D90030E974 /* IroPediaTests */;
+		};
+		A4FC0D952D306B2D00AD3E27 /* Exceptions for "IroPedia" folder in "IroPediaUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Assets.xcassets,
+			);
+			target = A56A8BF02CDDD0D90030E974 /* IroPediaUITests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		A56A8BD82CDDD0D70030E974 /* IroPedia */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A4FC0D942D306B2D00AD3E27 /* Exceptions for "IroPedia" folder in "IroPediaTests" target */,
+				A4FC0D952D306B2D00AD3E27 /* Exceptions for "IroPedia" folder in "IroPediaUITests" target */,
+			);
 			path = IroPedia;
 			sourceTree = "<group>";
 		};
@@ -392,6 +413,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = IroPedia/IroPedia.entitlements;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -422,6 +444,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = IroPedia/IroPedia.entitlements;
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
